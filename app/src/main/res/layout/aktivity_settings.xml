@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        >
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_arrow"/>  <!-- системная иконка, подходит для примера -->
+
+
+        <!-- Заголовок "Настройки" -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_title"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/button_text"
+            android:fontFamily="sans-serif"
+            android:includeFontPadding="false"
+            android:lineHeight="24sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="21dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/dark_theme"
+            android:textSize="16sp"
+            android:textColor="@color/button_text"
+            android:fontFamily="sans-serif"
+            android:includeFontPadding="false"
+            android:lineHeight="19sp" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="25dp"
+            app:thumbTint="#00D6C3" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="21dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/share_app"
+            android:textSize="16sp"
+            android:textColor="@color/button_text"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:includeFontPadding="false"
+            android:lineHeight="19sp" />
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="19dp"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/ic_share" />  <!-- замените на свой ресурс -->
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="21dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/support"
+            android:textSize="16sp"
+            android:textColor="@color/button_text"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:includeFontPadding="false"
+            android:lineHeight="19sp"/>
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/ic_support"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="21dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/terms"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/button_text"
+            android:textStyle="normal"
+            android:includeFontPadding="false"
+            android:lineHeight="19sp"/>
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="19dp"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/ic_document"
+            app:tint="@color/icon_tint"/>
+    </LinearLayout>
+</LinearLayout>

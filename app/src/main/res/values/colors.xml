@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="screen_background">#2196F3</color>   <!-- синий фон -->
+<color name="button_background">#FFFFFF</color>   <!-- белый фон кнопок -->
+<color name="button_text">#1A1B22</color>         <!-- тёмный текст на кнопках -->
+<color name="icon_tint">#1A1B22</color>
+<color name="titl_text">#FFFFFF</color>
+<color name="black">#1A1B22</color>
+</resources>
