@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "PlaylistMaker2"
+rootProject.name = "layoyt-hw"
 include(":app")
  
