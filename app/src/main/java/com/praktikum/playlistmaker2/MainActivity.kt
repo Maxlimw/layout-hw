@@ -8,13 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
+
         val searchButton = findViewById<Button>(R.id.button_search)
         val mediaButton = findViewById<Button>(R.id.button_media)
         val settingsButton = findViewById<Button>(R.id.button_settings)
 
-        // Обработчики нажатий
         searchButton.setOnClickListener {
             startActivity(Intent(this, SearchActivity::class.java))
         }
@@ -28,4 +27,3 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-

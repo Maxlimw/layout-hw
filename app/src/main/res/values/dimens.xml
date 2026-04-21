@@ -1,11 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="text_size_title">22sp</dimen>
-    <dimen name="text_size_medium">16sp</dimen>
-    <dimen name="margin_small">8dp</dimen>
-    <dimen name="margin_medium">16dp</dimen>
-    <dimen name="margin_start_title">12dp</dimen>
-    <dimen name="margin_top_title">10dp</dimen>
+    <dimen name="main_horizontal_padding">16dp</dimen>
+    <dimen name="main_title_start">12dp</dimen>
+    <dimen name="main_header_height">56dp</dimen>
+    <dimen name="main_first_card_margin_top">24dp</dimen>
+    <dimen name="main_card_spacing">16dp</dimen>
+
+    <dimen name="settings_header_height">56dp</dimen>
+    <dimen name="settings_row_height">61dp</dimen>
+    <dimen name="settings_title_start">12dp</dimen>
+    <dimen name="settings_first_row_margin_top">24dp</dimen>
+    <dimen name="settings_text_start">16dp</dimen>
+    <dimen name="settings_end_icon_margin">12dp</dimen>
+
+    <dimen name="spacing_xs">8dp</dimen>
+    <dimen name="spacing_sm">12dp</dimen>
+    <dimen name="spacing_md">16dp</dimen>
+    <dimen name="spacing_lg">24dp</dimen>
+
+    <dimen name="main_title_size">22sp</dimen>
+    <dimen name="settings_title_size">22sp</dimen>
+    <dimen name="button_text_size">22sp</dimen>
+    <dimen name="settings_item_text_size">16sp</dimen>
+
+    <dimen name="main_button_height">220dp</dimen>
     <dimen name="button_corner_radius">16dp</dimen>
-    <dimen name="icon_padding">8dp</dimen>
+    <dimen name="back_button_size">48dp</dimen>
+    <dimen name="icon_size">24dp</dimen>
+    <dimen name="main_icon_padding">8dp</dimen>
+    <dimen name="switch_width">48dp</dimen>
+    <dimen name="switch_height">24dp</dimen>
 </resources>
