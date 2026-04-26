@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="white">#FF1A1B22</color>
     <color name="black">#FFFFFFFF</color>
+    <color name="white">#FF2F3035</color>
 
-    <color name="brand_blue">#3772E7</color>
+    <color name="brand_blue">#FF1A1B22</color>
     <color name="text_primary">#FFFFFFFF</color>
     <color name="icon_secondary">#FFAEAFB4</color>
     <color name="switch_track_off">#FF2F3035</color>
+
+    <color name="screen_background">#FF1A1B22</color>
+    <color name="search_field_background">#FF2F3035</color>
+    <color name="switch_thumb_on">#3772E7</color>
+    <color name="switch_track_on">#7D3772E7</color>
 </resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/settings_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -54,8 +55,8 @@
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="10dp"
             android:checked="false"
-            app:thumbTint="@color/icon_secondary"
-            app:trackTint="@color/switch_track_off"
+            app:thumbTint="@color/switch_thumb_selector"
+            app:trackTint="@color/switch_track_selector"
             app:useMaterialThemeColors="false" />
     </FrameLayout>
 

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/search_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/screen_background"
     android:orientation="vertical">
 
     <LinearLayout
@@ -26,33 +27,43 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/settings_title_start"
-            android:fontFamily="sans-serif-medium"
+            android:fontFamily="sans-serif-bold"
             android:text="@string/search_button"
             android:textColor="@color/text_primary"
-            android:textSize="@dimen/settings_title_size" />
+            android:textSize="@dimen/search_title_size" />
     </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="36dp"
         android:layout_marginStart="@dimen/main_horizontal_padding"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="@dimen/main_horizontal_padding">
+        android:layout_marginEnd="@dimen/main_horizontal_padding"
+        android:background="@drawable/search_edit_text_background">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="8dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_search_24"
+            app:tint="@color/icon_secondary" />
 
         <EditText
             android:id="@+id/search_edit_text"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:background="@drawable/search_edit_text_background"
+            android:layout_height="match_parent"
+            android:layout_marginStart="36dp"
+            android:layout_marginEnd="40dp"
+            android:background="@android:color/transparent"
             android:hint="@string/search_hint"
             android:imeOptions="actionDone"
             android:inputType="text"
-            android:paddingStart="12dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="40dp"
-            android:paddingBottom="8dp"
+            android:paddingVertical="8dp"
             android:textColor="@color/text_primary"
             android:textColorHint="@color/icon_secondary"
+            android:textCursorDrawable="@drawable/search_cursor"
             android:textSize="16sp" />
 
         <ImageView
@@ -60,11 +71,12 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="12dp"
+            android:layout_marginEnd="8dp"
             android:contentDescription="@string/clear_search"
             android:src="@drawable/ic_clear_24"
             android:visibility="gone"
             app:tint="@color/icon_secondary" />
+
     </FrameLayout>
 
 </LinearLayout>
