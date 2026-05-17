@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/settings_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -9,9 +10,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_header_height"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="4dp"
-        android:gravity="center_vertical">
+        android:paddingStart="4dp">
 
         <ImageButton
             android:id="@+id/button_back"
@@ -20,16 +21,16 @@
             android:background="@android:color/transparent"
             android:contentDescription="@string/back"
             android:src="@drawable/ic_back_arrow_24"
-            android:tint="@color/text_primary" />
+            app:tint="@color/text_primary" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/settings_title_start"
+            android:fontFamily="sans-serif-medium"
             android:text="@string/settings_title"
             android:textColor="@color/text_primary"
-            android:textSize="@dimen/settings_title_size"
-            android:fontFamily="sans-serif-medium" />
+            android:textSize="@dimen/settings_title_size" />
     </LinearLayout>
 
     <FrameLayout
@@ -48,20 +49,24 @@
             android:textSize="@dimen/settings_item_text_size" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_theme"
             android:layout_width="@dimen/switch_width"
             android:layout_height="@dimen/switch_height"
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="10dp"
             android:checked="false"
-            app:thumbTint="@color/icon_secondary"
-            app:trackTint="@color/switch_track_off"
+            app:thumbTint="@color/switch_thumb_selector"
+            app:trackTint="@color/switch_track_selector"
             app:useMaterialThemeColors="false" />
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/button_share"
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_row_height"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true">
 
         <TextView
             android:layout_width="300dp"
@@ -78,13 +83,16 @@
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="@dimen/settings_end_icon_margin"
             android:src="@drawable/ic_share"
-            android:tint="@color/icon_secondary" />
+            app:tint="@color/icon_secondary" />
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/button_support"
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_row_height"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true">
 
         <TextView
             android:layout_width="300dp"
@@ -101,13 +109,16 @@
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="@dimen/settings_end_icon_margin"
             android:src="@drawable/ic_support"
-            android:tint="@color/icon_secondary" />
+            app:tint="@color/icon_secondary" />
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/button_agreement"
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_row_height"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true">
 
         <TextView
             android:layout_width="300dp"
@@ -124,7 +135,7 @@
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="@dimen/settings_end_icon_margin"
             android:src="@drawable/ic_document"
-            android:tint="@color/icon_secondary" />
+            app:tint="@color/icon_secondary" />
     </FrameLayout>
 
 </LinearLayout>
