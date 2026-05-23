@@ -47,6 +47,8 @@
     <dimen name="track_artwork_size">45dp</dimen>
     <dimen name="track_artwork_corner_radius">2dp</dimen>
     <dimen name="track_text_margin_start">8dp</dimen>
+    <dimen name="track_text_margin_end">8dp</dimen>
+    <dimen name="track_arrow_size">24dp</dimen>
     <dimen name="track_name_height">22dp</dimen>
     <dimen name="track_subtitle_height">13dp</dimen>
     <dimen name="track_subtitle_separator_margin">5dp</dimen>

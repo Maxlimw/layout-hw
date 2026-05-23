@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <solid android:color="@color/search_field_background" />
-    <corners android:radius="@dimen/track_artwork_corner_radius" />
-</shape>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="45dp"
+    android:height="45dp"
+    android:viewportWidth="45"
+    android:viewportHeight="45">
+
+    <path
+        android:fillColor="@color/search_field_background"
+        android:pathData="M2,0H43C44.1,0 45,0.9 45,2V43C45,44.1 44.1,45 43,45H2C0.9,45 0,44.1 0,43V2C0,0.9 0.9,0 2,0Z" />
+
+    <path
+        android:fillColor="@color/icon_secondary"
+        android:pathData="M29.5,13.5V25.9C29.5,28.2 27.6,30 25.3,30C23.4,30 21.8,28.8 21.8,27.3C21.8,25.7 23.4,24.5 25.3,24.5C26.1,24.5 26.8,24.7 27.4,25.1V17.4L19.1,19.2V28C19.1,30.3 17.2,32.1 14.9,32.1C13,32.1 11.4,30.9 11.4,29.4C11.4,27.8 13,26.6 14.9,26.6C15.7,26.6 16.4,26.8 17,27.2V16.1C17,15.4 17.5,14.8 18.2,14.7L28.1,12.6C28.8,12.5 29.5,12.9 29.5,13.5Z" />
+</vector>

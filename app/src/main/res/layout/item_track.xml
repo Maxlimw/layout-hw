@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/track_item_height"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
     android:paddingStart="@dimen/track_item_horizontal_padding"
     android:paddingEnd="@dimen/track_item_horizontal_padding">
 
@@ -13,14 +12,22 @@
         android:layout_height="@dimen/track_artwork_size"
         android:contentDescription="@null"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_track_placeholder" />
+        android:src="@drawable/ic_track_placeholder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/track_text_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/track_text_margin_start"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_marginEnd="@dimen/track_text_margin_end"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/track_arrow"
+        app:layout_constraintStart_toEndOf="@id/track_artwork"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/track_name"
@@ -33,25 +40,30 @@
             android:textColor="@color/text_primary"
             android:textSize="@dimen/track_name_text_size" />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/track_subtitle_height"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="@dimen/track_subtitle_height">
 
             <TextView
                 android:id="@+id/artist_name"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:ellipsize="end"
                 android:fontFamily="sans-serif"
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:textColor="@color/text_secondary"
-                android:textSize="@dimen/track_subtitle_text_size" />
+                android:textSize="@dimen/track_subtitle_text_size"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/track_separator"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/track_separator"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/track_subtitle_separator_margin"
@@ -60,7 +72,11 @@
                 android:gravity="center_vertical"
                 android:text="@string/track_separator"
                 android:textColor="@color/text_secondary"
-                android:textSize="@dimen/track_subtitle_text_size" />
+                android:textSize="@dimen/track_subtitle_text_size"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/track_time"
+                app:layout_constraintStart_toEndOf="@id/artist_name"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/track_time"
@@ -69,10 +85,24 @@
                 android:fontFamily="sans-serif"
                 android:gravity="center_vertical"
                 android:textColor="@color/text_secondary"
-                android:textSize="@dimen/track_subtitle_text_size" />
+                android:textSize="@dimen/track_subtitle_text_size"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/track_separator"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/track_arrow"
+        android:layout_width="@dimen/track_arrow_size"
+        android:layout_height="@dimen/track_arrow_size"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_arrow_forward_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
