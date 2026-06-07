@@ -60,6 +60,7 @@
             android:hint="@string/search_hint"
             android:imeOptions="actionDone"
             android:inputType="text"
+            android:singleLine="true"
             android:paddingVertical="@dimen/search_edit_text_padding_vertical"
             android:textColor="@color/text_primary"
             android:textColorHint="@color/icon_secondary"
@@ -79,13 +80,70 @@
 
     </FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/tracks_recycler_view"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/tracks_list_margin_top"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:overScrollMode="never" />
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tracks_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/tracks_list_margin_top"
+            android:clipToPadding="false"
+            android:overScrollMode="never" />
+
+        <LinearLayout
+            android:id="@+id/placeholder_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="@dimen/placeholder_margin_top"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/placeholder_horizontal_padding"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/placeholder_image"
+                android:layout_width="@dimen/placeholder_image_size"
+                android:layout_height="@dimen/placeholder_image_size"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_nothing_found" />
+
+            <TextView
+                android:id="@+id/placeholder_message"
+                android:layout_width="@dimen/placeholder_message_width"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/placeholder_message_margin_top"
+                android:gravity="center"
+                android:lineSpacingExtra="@dimen/placeholder_text_line_spacing"
+                android:text="@string/nothing_found"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/placeholder_text_size" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/placeholder_refresh_button"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/placeholder_button_height"
+                android:layout_marginTop="@dimen/placeholder_button_margin_top"
+                android:fontFamily="sans-serif-medium"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingStart="@dimen/placeholder_button_padding_start"
+                android:paddingEnd="@dimen/placeholder_button_padding_end"
+                android:text="@string/refresh"
+                android:textAllCaps="false"
+                android:textColor="@color/screen_background"
+                android:textSize="@dimen/placeholder_button_text_size"
+                android:visibility="gone"
+                app:backgroundTint="@color/text_primary"
+                app:cornerRadius="@dimen/placeholder_button_corner_radius" />
+
+        </LinearLayout>
+
+    </FrameLayout>
 
 </LinearLayout>
