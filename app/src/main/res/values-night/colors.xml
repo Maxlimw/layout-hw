@@ -6,6 +6,7 @@
     <color name="brand_blue">#FF1A1B22</color>
     <color name="text_primary">#FFFFFFFF</color>
     <color name="icon_secondary">#FFAEAFB4</color>
+    <color name="text_secondary">#FFAEAFB4</color>
     <color name="switch_track_off">#FF2F3035</color>
 
     <color name="screen_background">#FF1A1B22</color>
