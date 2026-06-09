@@ -4,7 +4,7 @@
     android:id="@+id/main_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/brand_blue"
+    android:background="@color/main_background"
     android:orientation="vertical">
 
 
@@ -18,7 +18,7 @@
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="@dimen/main_title_start"
             android:text="@string/title_main"
-            android:textColor="@color/white"
+            android:textColor="@color/yp_white"
             android:textSize="@dimen/main_title_size"
             android:fontFamily="sans-serif-medium" />
     </FrameLayout>

@@ -37,6 +37,8 @@
     <dimen name="search_field_margin_top">24dp</dimen>
     <dimen name="search_icon_margin_start">8dp</dimen>
     <dimen name="search_icon_margin_end">8dp</dimen>
+    <dimen name="clear_button_width">40dp</dimen>
+    <dimen name="clear_button_height">36dp</dimen>
     <dimen name="search_edit_text_margin_start">36dp</dimen>
     <dimen name="search_edit_text_margin_end">40dp</dimen>
     <dimen name="search_edit_text_padding_vertical">8dp</dimen>
