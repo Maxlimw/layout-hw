@@ -13,6 +13,8 @@
     <color name="screen_background">#FFFFFFFF</color>
     <color name="button_background">#FFFFFFFF</color>
     <color name="search_field_background">#FFE6E8EB</color>
+    <color name="search_field_hint">#FFAEAFB4</color>
+    <color name="track_placeholder_background">#FFE6E8EB</color>
 
     <color name="text_primary">#FF1A1B22</color>
     <color name="icon_secondary">#FFAEAFB4</color>

@@ -4,8 +4,11 @@
          The fixed brand palette (yp_*) stays the same as in values/colors.xml. -->
     <color name="main_background">#FF1A1B22</color>
     <color name="screen_background">#FF1A1B22</color>
-    <color name="button_background">#FF2F3035</color>
-    <color name="search_field_background">#FF2F3035</color>
+    <!-- Per the mockups the main-screen buttons and the search field stay light
+         in the dark theme, so button_background is not overridden here. -->
+    <color name="search_field_background">#FFFFFFFF</color>
+    <color name="search_field_hint">#FF1A1B22</color>
+    <color name="track_placeholder_background">#FF2F3035</color>
 
     <color name="text_primary">#FFFFFFFF</color>
 

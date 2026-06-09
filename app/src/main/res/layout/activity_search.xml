@@ -48,7 +48,7 @@
             android:layout_marginStart="@dimen/search_icon_margin_start"
             android:contentDescription="@null"
             android:src="@drawable/ic_search_24"
-            app:tint="@color/icon_secondary" />
+            app:tint="@color/search_field_hint" />
 
         <EditText
             android:id="@+id/search_edit_text"
@@ -62,8 +62,8 @@
             android:inputType="text"
             android:singleLine="true"
             android:paddingVertical="@dimen/search_edit_text_padding_vertical"
-            android:textColor="@color/text_primary"
-            android:textColorHint="@color/icon_secondary"
+            android:textColor="@color/yp_black"
+            android:textColorHint="@color/search_field_hint"
             android:textCursorDrawable="@drawable/search_cursor"
             android:textSize="@dimen/search_text_size" />
 
@@ -76,7 +76,7 @@
             android:scaleType="center"
             android:src="@drawable/ic_clear_24"
             android:visibility="gone"
-            app:tint="@color/icon_secondary" />
+            app:tint="@color/search_field_hint" />
 
     </FrameLayout>
 
