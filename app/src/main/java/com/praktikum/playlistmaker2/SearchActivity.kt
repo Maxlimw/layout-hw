@@ -39,7 +39,11 @@ class SearchActivity : AppCompatActivity() {
 
     private val itunesApi = retrofit.create(ItunesApi::class.java)
 
-    private val tracksAdapter = TracksAdapter()
+    private val tracksAdapter = TracksAdapter(onTrackClick = ::onTrackClick)
+    private val historyAdapter = TracksAdapter(onTrackClick = ::onTrackClick)
+    private lateinit var searchHistory: SearchHistory
+    private lateinit var historyContainer: View
+    private var searchCall: Call<TracksSearchResponse>? = null
 
     private lateinit var backButton: ImageButton
     private lateinit var searchEditText: EditText
@@ -78,6 +82,17 @@ class SearchActivity : AppCompatActivity() {
         placeholderImage = findViewById(R.id.placeholder_image)
         placeholderMessage = findViewById(R.id.placeholder_message)
         placeholderRefreshButton = findViewById(R.id.placeholder_refresh_button)
+        historyContainer = findViewById(R.id.history_container)
+        searchHistory = SearchHistory(getSharedPreferences(App.PREFS_NAME, MODE_PRIVATE))
+        findViewById<RecyclerView>(R.id.history_recycler_view).apply {
+            layoutManager = LinearLayoutManager(this@SearchActivity)
+            adapter = historyAdapter
+        }
+        findViewById<Button>(R.id.clear_history_button).setOnClickListener {
+            searchHistory.clear()
+            updateHistoryVisibility()
+        }
+        searchEditText.setOnFocusChangeListener { _, _ -> updateHistoryVisibility() }
 
         tracksRecyclerView.layoutManager = LinearLayoutManager(this)
         tracksRecyclerView.adapter = tracksAdapter
@@ -95,6 +110,10 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchText = s?.toString() ?: ""
                 updateClearButtonVisibility(searchText)
+                cancelSearch()
+                tracksAdapter.setTracks(emptyList())
+                hidePlaceholder()
+                updateHistoryVisibility()
             }
 
             override fun afterTextChanged(s: Editable?) = Unit
@@ -112,14 +131,14 @@ class SearchActivity : AppCompatActivity() {
         clearButton.setOnClickListener {
             searchEditText.setText("")
             hideKeyboard()
-            searchEditText.clearFocus()
-            tracksAdapter.setTracks(emptyList())
-            hidePlaceholder()
+            searchEditText.requestFocus()
+            updateHistoryVisibility()
         }
 
         placeholderRefreshButton.setOnClickListener {
             search()
         }
+        updateHistoryVisibility()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -141,11 +160,19 @@ class SearchActivity : AppCompatActivity() {
             return
         }
 
-        itunesApi.search(query).enqueue(object : Callback<TracksSearchResponse> {
+        cancelSearch()
+        historyContainer.visibility = View.GONE
+        hidePlaceholder()
+        tracksAdapter.setTracks(emptyList())
+        val newCall = itunesApi.search(query)
+        searchCall = newCall
+        newCall.enqueue(object : Callback<TracksSearchResponse> {
             override fun onResponse(
                 call: Call<TracksSearchResponse>,
                 response: Response<TracksSearchResponse>
             ) {
+                if (call !== searchCall) return
+                searchCall = null
                 if (response.isSuccessful) {
                     val tracks = response.body()?.results ?: emptyList()
                     if (tracks.isEmpty()) {
@@ -159,6 +186,8 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
+                if (call !== searchCall || call.isCanceled) return
+                searchCall = null
                 showError()
             }
         })
@@ -168,6 +197,33 @@ class SearchActivity : AppCompatActivity() {
         hidePlaceholder()
         tracksAdapter.setTracks(tracks)
         tracksRecyclerView.visibility = View.VISIBLE
+    }
+
+    private fun onTrackClick(track: Track) {
+        searchHistory.addTrack(track)
+        updateHistoryVisibility()
+    }
+
+    private fun updateHistoryVisibility() {
+        val tracks = searchHistory.getTracks()
+        val showHistory = searchEditText.hasFocus() && searchEditText.text.isEmpty() && tracks.isNotEmpty()
+        historyAdapter.setTracks(tracks)
+        historyContainer.visibility = if (showHistory) View.VISIBLE else View.GONE
+        if (searchEditText.text.isEmpty()) {
+            tracksRecyclerView.visibility = View.GONE
+            placeholderContainer.visibility = View.GONE
+        }
+    }
+
+    private fun cancelSearch() {
+        val previousCall = searchCall
+        searchCall = null
+        previousCall?.cancel()
+    }
+
+    override fun onDestroy() {
+        cancelSearch()
+        super.onDestroy()
     }
 
     private fun showEmptyResult() {
