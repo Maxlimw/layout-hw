@@ -202,6 +202,7 @@ class SearchActivity : AppCompatActivity() {
     private fun onTrackClick(track: Track) {
         searchHistory.addTrack(track)
         updateHistoryVisibility()
+        startActivity(PlayerActivity.createIntent(this, track))
     }
 
     private fun updateHistoryVisibility() {

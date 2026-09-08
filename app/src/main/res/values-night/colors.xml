@@ -13,4 +13,5 @@
     <color name="text_primary">#FFFFFFFF</color>
 
     <color name="switch_track_off">#FF2F3035</color>
+    <color name="player_secondary_background">#40FFFFFF</color>
 </resources>
