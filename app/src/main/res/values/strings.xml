@@ -17,6 +17,10 @@
     <string name="clear_search">Очистить поиск</string>
     <string name="track_separator">•</string>
 
+    <string name="nothing_found">Ничего не нашлось</string>
+    <string name="connection_error">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="refresh">Обновить</string>
+
     <string name="share_message">https://practicum.yandex.ru/android-developer/</string>
     <string name="share_chooser_title">Поделиться приложением</string>
 

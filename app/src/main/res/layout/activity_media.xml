@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/brand_blue">
+    android:background="@color/main_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,14 +21,14 @@
             android:background="@android:color/transparent"
             android:contentDescription="@string/back"
             android:src="@drawable/ic_back_arrow_24"
-            app:tint="@color/white" />
+            app:tint="@color/yp_white" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/settings_title_start"
             android:text="@string/media_button"
-            android:textColor="@color/white"
+            android:textColor="@color/yp_white"
             android:textSize="@dimen/settings_title_size"
             android:fontFamily="sans-serif-medium" />
     </LinearLayout>

@@ -6,7 +6,7 @@
     android:viewportHeight="45">
 
     <path
-        android:fillColor="@color/search_field_background"
+        android:fillColor="@color/track_placeholder_background"
         android:pathData="M2,0H43C44.1,0 45,0.9 45,2V43C45,44.1 44.1,45 43,45H2C0.9,45 0,44.1 0,43V2C0,0.9 0.9,0 2,0Z" />
 
     <path

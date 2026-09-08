@@ -5,27 +5,50 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
 
     companion object {
         private const val SEARCH_TEXT_KEY = "SEARCH_TEXT_KEY"
+        private const val ITUNES_BASE_URL = "https://itunes.apple.com"
     }
+
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(ITUNES_BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    private val itunesApi = retrofit.create(ItunesApi::class.java)
+
+    private val tracksAdapter = TracksAdapter()
 
     private lateinit var backButton: ImageButton
     private lateinit var searchEditText: EditText
     private lateinit var clearButton: ImageView
     private lateinit var tracksRecyclerView: RecyclerView
+    private lateinit var placeholderContainer: LinearLayout
+    private lateinit var placeholderImage: ImageView
+    private lateinit var placeholderMessage: TextView
+    private lateinit var placeholderRefreshButton: Button
 
     private var searchText: String = ""
 
@@ -51,9 +74,13 @@ class SearchActivity : AppCompatActivity() {
         searchEditText = findViewById(R.id.search_edit_text)
         clearButton = findViewById(R.id.clear_icon)
         tracksRecyclerView = findViewById(R.id.tracks_recycler_view)
+        placeholderContainer = findViewById(R.id.placeholder_container)
+        placeholderImage = findViewById(R.id.placeholder_image)
+        placeholderMessage = findViewById(R.id.placeholder_message)
+        placeholderRefreshButton = findViewById(R.id.placeholder_refresh_button)
 
         tracksRecyclerView.layoutManager = LinearLayoutManager(this)
-        tracksRecyclerView.adapter = TracksAdapter(createMockTracks())
+        tracksRecyclerView.adapter = tracksAdapter
 
         backButton.setOnClickListener {
             finish()
@@ -73,10 +100,25 @@ class SearchActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) = Unit
         })
 
+        searchEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                search()
+                true
+            } else {
+                false
+            }
+        }
+
         clearButton.setOnClickListener {
             searchEditText.setText("")
             hideKeyboard()
             searchEditText.clearFocus()
+            tracksAdapter.setTracks(emptyList())
+            hidePlaceholder()
+        }
+
+        placeholderRefreshButton.setOnClickListener {
+            search()
         }
     }
 
@@ -93,39 +135,62 @@ class SearchActivity : AppCompatActivity() {
         updateClearButtonVisibility(searchText)
     }
 
-    private fun createMockTracks(): ArrayList<Track> {
-        return arrayListOf(
-            Track(
-                trackName = "Smells Like Teen Spirit",
-                artistName = "Nirvana",
-                trackTime = "5:01",
-                artworkUrl100 = "https://is5-ssl.mzstatic.com/image/thumb/Music115/v4/7b/58/c2/7b58c21a-2b51-2bb2-e59a-9bb9b96ad8c3/00602567924166.rgb.jpg/100x100bb.jpg"
-            ),
-            Track(
-                trackName = "Billie Jean",
-                artistName = "Michael Jackson",
-                trackTime = "4:35",
-                artworkUrl100 = "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/3d/9d/38/3d9d3811-71f0-3a0e-1ada-3004e56ff852/827969428726.jpg/100x100bb.jpg"
-            ),
-            Track(
-                trackName = "Stayin' Alive",
-                artistName = "Bee Gees",
-                trackTime = "4:10",
-                artworkUrl100 = "https://is4-ssl.mzstatic.com/image/thumb/Music115/v4/1f/80/1f/1f801fc1-8c0f-ea3e-d3e5-387c6619619e/16UMGIM86640.rgb.jpg/100x100bb.jpg"
-            ),
-            Track(
-                trackName = "Whole Lotta Love",
-                artistName = "Led Zeppelin",
-                trackTime = "5:33",
-                artworkUrl100 = "https://is2-ssl.mzstatic.com/image/thumb/Music62/v4/7e/17/e3/7e17e33f-2efa-2a36-e916-7f808576cf6b/mzm.fyigqcbs.jpg/100x100bb.jpg"
-            ),
-            Track(
-                trackName = "Sweet Child O'Mine",
-                artistName = "Guns N' Roses",
-                trackTime = "5:03",
-                artworkUrl100 = "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg"
-            )
-        )
+    private fun search() {
+        val query = searchText.trim()
+        if (query.isEmpty()) {
+            return
+        }
+
+        itunesApi.search(query).enqueue(object : Callback<TracksSearchResponse> {
+            override fun onResponse(
+                call: Call<TracksSearchResponse>,
+                response: Response<TracksSearchResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val tracks = response.body()?.results ?: emptyList()
+                    if (tracks.isEmpty()) {
+                        showEmptyResult()
+                    } else {
+                        showTracks(tracks)
+                    }
+                } else {
+                    showError()
+                }
+            }
+
+            override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
+                showError()
+            }
+        })
+    }
+
+    private fun showTracks(tracks: List<Track>) {
+        hidePlaceholder()
+        tracksAdapter.setTracks(tracks)
+        tracksRecyclerView.visibility = View.VISIBLE
+    }
+
+    private fun showEmptyResult() {
+        tracksAdapter.setTracks(emptyList())
+        tracksRecyclerView.visibility = View.GONE
+        placeholderImage.setImageResource(R.drawable.ic_nothing_found)
+        placeholderMessage.setText(R.string.nothing_found)
+        placeholderRefreshButton.visibility = View.GONE
+        placeholderContainer.visibility = View.VISIBLE
+    }
+
+    private fun showError() {
+        tracksAdapter.setTracks(emptyList())
+        tracksRecyclerView.visibility = View.GONE
+        placeholderImage.setImageResource(R.drawable.ic_connection_error)
+        placeholderMessage.setText(R.string.connection_error)
+        placeholderRefreshButton.visibility = View.VISIBLE
+        placeholderContainer.visibility = View.VISIBLE
+    }
+
+    private fun hidePlaceholder() {
+        placeholderContainer.visibility = View.GONE
+        tracksRecyclerView.visibility = View.VISIBLE
     }
 
     private fun updateClearButtonVisibility(text: String) {
