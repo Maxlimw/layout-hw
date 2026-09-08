@@ -29,4 +29,6 @@
     <string name="support_message">Спасибо разработчикам и команде Практикума!</string>
 
     <string name="terms_url">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="search_history_title">Вы искали</string>
+    <string name="clear_history">Очистить историю</string>
 </resources>
