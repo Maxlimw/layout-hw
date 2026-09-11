@@ -14,6 +14,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.junit.Assert.assertEquals
 
 class PlayerNavigationTest {
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -30,6 +31,27 @@ class PlayerNavigationTest {
     @After
     fun restoreHistory() {
         preferences.edit().putString("search_history", savedHistory).commit()
+    }
+
+    @Test
+    fun repeatedClickOpensOnlyOnePlayer() {
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+        val monitor = instrumentation.addMonitor(PlayerActivity::class.java.name, null, false)
+        try {
+            ActivityScenario.launch(SearchActivity::class.java).use { scenario ->
+                scenario.onActivity { activity ->
+                    val click = SearchActivity::class.java.getDeclaredMethod("onTrackClick", Track::class.java)
+                    click.isAccessible = true
+                    click.invoke(activity, track)
+                    click.invoke(activity, track)
+                }
+                onView(withId(R.id.player_track_name)).check(matches(withText(track.trackName)))
+                assertEquals(1, monitor.hits)
+                pressBack()
+            }
+        } finally {
+            instrumentation.removeMonitor(monitor)
+        }
     }
 
     @Test
