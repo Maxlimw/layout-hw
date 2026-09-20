@@ -1,4 +1,6 @@
-package com.praktikum.playlistmaker2
+package com.praktikum.playlistmaker2.presentation
+
+import com.praktikum.playlistmaker2.domain.model.Track
 
 import android.annotation.SuppressLint
 import android.view.ViewGroup

@@ -1,5 +1,12 @@
 package com.praktikum.playlistmaker2
 
+import com.praktikum.playlistmaker2.domain.model.Track
+import com.praktikum.playlistmaker2.presentation.*
+import com.praktikum.playlistmaker2.data.storage.PreferencesStorage
+import com.praktikum.playlistmaker2.data.repository.HistoryRepositoryImpl
+import com.praktikum.playlistmaker2.domain.impl.HistoryInteractorImpl
+import com.google.gson.Gson
+
 import android.content.Context
 import android.view.View
 import android.widget.EditText
@@ -18,14 +25,14 @@ import org.junit.Assert.assertEquals
 
 class PlayerNavigationTest {
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
-    private val preferences = context.getSharedPreferences(App.PREFS_NAME, Context.MODE_PRIVATE)
+    private val preferences = context.getSharedPreferences(PreferencesStorage.PREFS_NAME, Context.MODE_PRIVATE)
     private var savedHistory: String? = null
     private val track = Track("Navigation test track", "Test artist", 65000L, null, 999L)
 
     @Before
     fun saveHistory() {
         savedHistory = preferences.getString("search_history", null)
-        SearchHistory(preferences).clear()
+        HistoryInteractorImpl(HistoryRepositoryImpl(PreferencesStorage(preferences, Gson()))).clear()
     }
 
     @After
@@ -73,7 +80,7 @@ class PlayerNavigationTest {
 
     @Test
     fun opensFromHistoryAndSystemBackReturnsToHistory() {
-        SearchHistory(preferences).addTrack(track)
+        HistoryInteractorImpl(HistoryRepositoryImpl(PreferencesStorage(preferences, Gson()))).addTrack(track)
         ActivityScenario.launch(SearchActivity::class.java).use { scenario ->
             scenario.onActivity { activity ->
                 activity.findViewById<EditText>(R.id.search_edit_text).requestFocus()

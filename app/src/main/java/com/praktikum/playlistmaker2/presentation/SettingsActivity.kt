@@ -1,7 +1,8 @@
-package com.praktikum.playlistmaker2
+package com.praktikum.playlistmaker2.presentation
 
-import android.content.Intent
-import android.net.Uri
+import com.praktikum.playlistmaker2.R
+import com.praktikum.playlistmaker2.Creator
+
 import android.os.Bundle
 import android.widget.FrameLayout
 import android.widget.ImageButton
@@ -44,17 +45,16 @@ class SettingsActivity : AppCompatActivity() {
         supportButton = findViewById(R.id.button_support)
         userAgreementButton = findViewById(R.id.button_agreement)
 
-        val sharedPreferences = getSharedPreferences(App.PREFS_NAME, MODE_PRIVATE)
-        themeSwitcher.isChecked = sharedPreferences.getBoolean(App.DARK_THEME_KEY, false)
+        val settingsInteractor = Creator.createSettingsInteractor()
+        val sharingInteractor = Creator.createSharingInteractor()
+        themeSwitcher.isChecked = settingsInteractor.getSettings().darkTheme
 
         backButton.setOnClickListener {
             finish()
         }
 
         themeSwitcher.setOnCheckedChangeListener { _, checked ->
-            sharedPreferences.edit()
-                .putBoolean(App.DARK_THEME_KEY, checked)
-                .apply()
+            settingsInteractor.setDarkTheme(checked)
 
             AppCompatDelegate.setDefaultNightMode(
                 if (checked) AppCompatDelegate.MODE_NIGHT_YES
@@ -63,34 +63,15 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         shareAppButton.setOnClickListener {
-            val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                type = "text/plain"
-                putExtra(Intent.EXTRA_TEXT, getString(R.string.share_message))
-            }
-            startActivity(
-                Intent.createChooser(
-                    shareIntent,
-                    getString(R.string.share_chooser_title)
-                )
-            )
+            sharingInteractor.shareApp()
         }
 
         supportButton.setOnClickListener {
-            val supportIntent = Intent(Intent.ACTION_SENDTO).apply {
-                data = Uri.parse("mailto:")
-                putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.support_email)))
-                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_subject))
-                putExtra(Intent.EXTRA_TEXT, getString(R.string.support_message))
-            }
-            startActivity(supportIntent)
+            sharingInteractor.contactSupport()
         }
 
         userAgreementButton.setOnClickListener {
-            val agreementIntent = Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse(getString(R.string.terms_url))
-            )
-            startActivity(agreementIntent)
+            sharingInteractor.openTerms()
         }
     }
 }

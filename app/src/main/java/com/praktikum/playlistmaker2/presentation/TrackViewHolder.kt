@@ -1,4 +1,8 @@
-package com.praktikum.playlistmaker2
+package com.praktikum.playlistmaker2.presentation
+
+import com.praktikum.playlistmaker2.R
+import com.praktikum.playlistmaker2.domain.model.Track
+import com.praktikum.playlistmaker2.presentation.util.*
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

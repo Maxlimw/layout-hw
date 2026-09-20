@@ -5,16 +5,11 @@ import androidx.appcompat.app.AppCompatDelegate
 
 class App : Application() {
 
-    companion object {
-        const val PREFS_NAME = "playlist_maker_prefs"
-        const val DARK_THEME_KEY = "dark_theme"
-    }
-
     override fun onCreate() {
         super.onCreate()
 
-        val sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-        val darkThemeEnabled = sharedPreferences.getBoolean(DARK_THEME_KEY, false)
+        Creator.init(this)
+        val darkThemeEnabled = Creator.createSettingsInteractor().getSettings().darkTheme
 
         AppCompatDelegate.setDefaultNightMode(
             if (darkThemeEnabled) {

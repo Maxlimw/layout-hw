@@ -1,16 +1,16 @@
 package com.praktikum.playlistmaker2
 
+import com.praktikum.playlistmaker2.presentation.*
+
 import android.os.SystemClock
 import android.view.View
 import android.widget.EditText
 import androidx.test.core.app.ActivityScenario
-import okhttp3.Request
-import okio.Timeout
 import org.junit.Assert.*
 import org.junit.Test
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.praktikum.playlistmaker2.domain.api.SearchInteractor
+import com.praktikum.playlistmaker2.domain.model.SearchResult
+import com.praktikum.playlistmaker2.domain.repository.Cancellable
 
 class SearchDebounceTest {
     @Test
@@ -18,7 +18,7 @@ class SearchDebounceTest {
         val api = FakeApi()
         ActivityScenario.launch(SearchActivity::class.java).use { scenario ->
             scenario.onActivity { activity ->
-                SearchActivity::class.java.getDeclaredField("itunesApi").apply {
+                SearchActivity::class.java.getDeclaredField("searchInteractor").apply {
                     isAccessible = true
                     set(activity, api)
                 }
@@ -55,7 +55,7 @@ class SearchDebounceTest {
         val api = FakeApi()
         val scenario = ActivityScenario.launch(SearchActivity::class.java)
         scenario.onActivity {
-            SearchActivity::class.java.getDeclaredField("itunesApi").apply {
+            SearchActivity::class.java.getDeclaredField("searchInteractor").apply {
                 isAccessible = true
                 set(it, api)
             }
@@ -72,28 +72,21 @@ class SearchDebounceTest {
         assertTrue(api.calls.isEmpty())
     }
 
-    private class FakeApi : ItunesApi {
+    private class FakeApi : SearchInteractor {
         val calls = mutableListOf<FakeCall>()
         val queries = mutableListOf<String>()
-        override fun search(text: String): Call<TracksSearchResponse> {
-            queries.add(text)
-            return FakeCall().also { calls.add(it) }
+        override fun search(query: String, callback: (SearchResult) -> Unit): Cancellable {
+            queries.add(query)
+            return FakeCall(callback).also { calls.add(it) }
         }
     }
 
-    private class FakeCall : Call<TracksSearchResponse> {
-        private var callback: Callback<TracksSearchResponse>? = null
-        private var cancelled = false
+    private class FakeCall(private val callback: (SearchResult) -> Unit) : Cancellable {
+        var isCanceled = false
+            private set
         fun respond() {
-            callback?.onResponse(this, Response.success(TracksSearchResponse(0, emptyList())))
+            callback(SearchResult.Success(emptyList()))
         }
-        override fun enqueue(callback: Callback<TracksSearchResponse>) { this.callback = callback }
-        override fun cancel() { cancelled = true }
-        override fun isCanceled() = cancelled
-        override fun isExecuted() = callback != null
-        override fun clone(): Call<TracksSearchResponse> = FakeCall()
-        override fun execute(): Response<TracksSearchResponse> = error("Use enqueue")
-        override fun request(): Request = Request.Builder().url("https://example.com").build()
-        override fun timeout(): Timeout = Timeout.NONE
+        override fun cancel() { isCanceled = true }
     }
 }

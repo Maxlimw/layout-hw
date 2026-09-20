@@ -1,4 +1,8 @@
-package com.praktikum.playlistmaker2
+package com.praktikum.playlistmaker2.presentation
+
+import com.praktikum.playlistmaker2.R
+import com.praktikum.playlistmaker2.Creator
+import com.praktikum.playlistmaker2.domain.model.Track
 
 import android.content.Context
 import android.os.Bundle
@@ -21,33 +25,27 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.praktikum.playlistmaker2.domain.api.HistoryInteractor
+import com.praktikum.playlistmaker2.domain.api.SearchInteractor
+import com.praktikum.playlistmaker2.domain.model.SearchResult
+import com.praktikum.playlistmaker2.domain.repository.Cancellable
 
 class SearchActivity : AppCompatActivity() {
 
     companion object {
         private const val SEARCH_TEXT_KEY = "SEARCH_TEXT_KEY"
-        private const val ITUNES_BASE_URL = "https://itunes.apple.com"
         private const val SEARCH_DELAY_MS = 2000L
         private const val CLICK_DELAY_MS = 1000L
     }
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(ITUNES_BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val itunesApi = retrofit.create(ItunesApi::class.java)
+    private lateinit var searchInteractor: SearchInteractor
 
     private val tracksAdapter = TracksAdapter(onTrackClick = ::onTrackClick)
     private val historyAdapter = TracksAdapter(onTrackClick = ::onTrackClick)
-    private lateinit var searchHistory: SearchHistory
+    private lateinit var searchHistory: HistoryInteractor
     private lateinit var historyContainer: View
-    private var searchCall: Call<TracksSearchResponse>? = null
+    private var searchCall: Cancellable? = null
+    private var requestVersion = 0
     private val handler = Handler(Looper.getMainLooper())
     private val searchRunnable = Runnable { search() }
     private var isClickAllowed = true
@@ -93,7 +91,8 @@ class SearchActivity : AppCompatActivity() {
         placeholderRefreshButton = findViewById(R.id.placeholder_refresh_button)
         historyContainer = findViewById(R.id.history_container)
         searchProgress = findViewById(R.id.search_progress)
-        searchHistory = SearchHistory(getSharedPreferences(App.PREFS_NAME, MODE_PRIVATE))
+        searchInteractor = Creator.createSearchInteractor()
+        searchHistory = Creator.createHistoryInteractor()
         findViewById<RecyclerView>(R.id.history_recycler_view).apply {
             layoutManager = LinearLayoutManager(this@SearchActivity)
             adapter = historyAdapter
@@ -178,35 +177,18 @@ class SearchActivity : AppCompatActivity() {
         tracksAdapter.setTracks(emptyList())
         tracksRecyclerView.visibility = View.GONE
         searchProgress.visibility = View.VISIBLE
-        val newCall = itunesApi.search(query)
-        searchCall = newCall
-        newCall.enqueue(object : Callback<TracksSearchResponse> {
-            override fun onResponse(
-                call: Call<TracksSearchResponse>,
-                response: Response<TracksSearchResponse>
-            ) {
-                if (call !== searchCall) return
-                searchCall = null
-                searchProgress.visibility = View.GONE
-                if (response.isSuccessful) {
-                    val tracks = response.body()?.results ?: emptyList()
-                    if (tracks.isEmpty()) {
-                        showEmptyResult()
-                    } else {
-                        showTracks(tracks)
-                    }
-                } else {
-                    showError()
+        val currentVersion = requestVersion
+        searchCall = searchInteractor.search(query) { result ->
+            if (currentVersion != requestVersion) return@search
+            searchCall = null
+            searchProgress.visibility = View.GONE
+            when (result) {
+                is SearchResult.Success -> {
+                    if (result.tracks.isEmpty()) showEmptyResult() else showTracks(result.tracks)
                 }
+                SearchResult.Error -> showError()
             }
-
-            override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
-                if (call !== searchCall || call.isCanceled) return
-                searchCall = null
-                searchProgress.visibility = View.GONE
-                showError()
-            }
-        })
+        }
     }
 
     private fun showTracks(tracks: List<Track>) {
@@ -237,6 +219,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun cancelSearch() {
+        requestVersion++
         val previousCall = searchCall
         searchCall = null
         previousCall?.cancel()
