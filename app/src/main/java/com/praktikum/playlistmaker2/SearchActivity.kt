@@ -2,6 +2,8 @@ package com.praktikum.playlistmaker2
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -30,6 +32,8 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         private const val SEARCH_TEXT_KEY = "SEARCH_TEXT_KEY"
         private const val ITUNES_BASE_URL = "https://itunes.apple.com"
+        private const val SEARCH_DELAY_MS = 2000L
+        private const val CLICK_DELAY_MS = 1000L
     }
 
     private val retrofit = Retrofit.Builder()
@@ -44,6 +48,11 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchHistory: SearchHistory
     private lateinit var historyContainer: View
     private var searchCall: Call<TracksSearchResponse>? = null
+    private val handler = Handler(Looper.getMainLooper())
+    private val searchRunnable = Runnable { search() }
+    private var isClickAllowed = true
+    private val unlockClickRunnable = Runnable { isClickAllowed = true }
+    private lateinit var searchProgress: View
 
     private lateinit var backButton: ImageButton
     private lateinit var searchEditText: EditText
@@ -83,6 +92,7 @@ class SearchActivity : AppCompatActivity() {
         placeholderMessage = findViewById(R.id.placeholder_message)
         placeholderRefreshButton = findViewById(R.id.placeholder_refresh_button)
         historyContainer = findViewById(R.id.history_container)
+        searchProgress = findViewById(R.id.search_progress)
         searchHistory = SearchHistory(getSharedPreferences(App.PREFS_NAME, MODE_PRIVATE))
         findViewById<RecyclerView>(R.id.history_recycler_view).apply {
             layoutManager = LinearLayoutManager(this@SearchActivity)
@@ -114,6 +124,7 @@ class SearchActivity : AppCompatActivity() {
                 tracksAdapter.setTracks(emptyList())
                 hidePlaceholder()
                 updateHistoryVisibility()
+                searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) = Unit
@@ -155,6 +166,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun search() {
+        handler.removeCallbacks(searchRunnable)
         val query = searchText.trim()
         if (query.isEmpty()) {
             return
@@ -164,6 +176,8 @@ class SearchActivity : AppCompatActivity() {
         historyContainer.visibility = View.GONE
         hidePlaceholder()
         tracksAdapter.setTracks(emptyList())
+        tracksRecyclerView.visibility = View.GONE
+        searchProgress.visibility = View.VISIBLE
         val newCall = itunesApi.search(query)
         searchCall = newCall
         newCall.enqueue(object : Callback<TracksSearchResponse> {
@@ -173,6 +187,7 @@ class SearchActivity : AppCompatActivity() {
             ) {
                 if (call !== searchCall) return
                 searchCall = null
+                searchProgress.visibility = View.GONE
                 if (response.isSuccessful) {
                     val tracks = response.body()?.results ?: emptyList()
                     if (tracks.isEmpty()) {
@@ -188,6 +203,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
                 if (call !== searchCall || call.isCanceled) return
                 searchCall = null
+                searchProgress.visibility = View.GONE
                 showError()
             }
         })
@@ -200,6 +216,10 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun onTrackClick(track: Track) {
+        if (!isClickAllowed) return
+        isClickAllowed = false
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(unlockClickRunnable, CLICK_DELAY_MS)
         searchHistory.addTrack(track)
         updateHistoryVisibility()
         startActivity(PlayerActivity.createIntent(this, track))
@@ -220,9 +240,18 @@ class SearchActivity : AppCompatActivity() {
         val previousCall = searchCall
         searchCall = null
         previousCall?.cancel()
+        searchProgress.visibility = View.GONE
+    }
+
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        if (searchText.isNotBlank()) {
+            handler.postDelayed(searchRunnable, SEARCH_DELAY_MS)
+        }
     }
 
     override fun onDestroy() {
+        handler.removeCallbacksAndMessages(null)
         cancelSearch()
         super.onDestroy()
     }

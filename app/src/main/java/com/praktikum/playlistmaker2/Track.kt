@@ -11,7 +11,8 @@ data class Track(
     val collectionName: String? = null,
     val releaseDate: String? = null,
     val primaryGenreName: String? = null,
-    val country: String? = null
+    val country: String? = null,
+    val previewUrl: String? = null
 ) {
     fun getFormattedTime(): String {
         val seconds = (trackTimeMillis ?: 0L).coerceAtLeast(0L) / 1000

@@ -35,7 +35,10 @@
     <string name="player_play">Воспроизвести</string>
     <string name="player_playlist">Добавить в плейлист</string>
     <string name="player_favorite">Добавить в избранное</string>
-    <string name="player_initial_time">00:30</string>
+    <string name="player_initial_time">00:00</string>
+    <string name="player_pause">Пауза</string>
+    <string name="player_preview_unavailable">Отрывок недоступен</string>
+    <string name="player_preview_error">Не удалось загрузить отрывок</string>
     <string name="player_duration">Длительность</string>
     <string name="player_album">Альбом</string>
     <string name="player_year">Год</string>
