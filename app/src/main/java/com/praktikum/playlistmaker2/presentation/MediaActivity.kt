@@ -1,4 +1,6 @@
-package com.praktikum.playlistmaker2
+package com.praktikum.playlistmaker2.presentation
+
+import com.praktikum.playlistmaker2.R
 
 import android.os.Bundle
 import android.widget.ImageButton

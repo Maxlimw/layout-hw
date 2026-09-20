@@ -1,5 +1,8 @@
 package com.praktikum.playlistmaker2
 
+import com.praktikum.playlistmaker2.domain.model.Track
+import com.praktikum.playlistmaker2.presentation.*
+
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap

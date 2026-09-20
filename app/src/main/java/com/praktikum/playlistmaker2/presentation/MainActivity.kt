@@ -1,4 +1,6 @@
-package com.praktikum.playlistmaker2
+package com.praktikum.playlistmaker2.presentation
+
+import com.praktikum.playlistmaker2.R
 
 import android.content.Intent
 import android.os.Bundle
